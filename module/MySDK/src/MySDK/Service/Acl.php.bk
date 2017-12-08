@@ -1,0 +1,61 @@
+<?php
+
+namespace Base\Service;
+
+use Zend\Permissions\Acl\Acl as ClassAcl;
+use Zend\Permissions\Acl\Role\GenericRole as Role;
+use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+
+class Acl extends ClassAcl
+{
+    protected $arrConfig;
+
+    public function __construct($arrConfig)
+    {
+        $this->arrConfig = $arrConfig;
+
+        $this->loadPerfil();
+        $this->loadResource();
+        $this->loadAllow();
+    }
+
+    public function loadPerfil()
+    {
+        $this->addRole(new Role('publico'));
+        $this->addRole(new Role('autenticado'), 'publico');
+
+        foreach ($this->arrConfig['perfis'] as $sgPerfil => $dsPerfil) {
+            $this->addRole(new Role($sgPerfil), 'autenticado');
+        }
+    }
+
+    public function loadResource()
+    {
+        foreach($this->arrConfig['permissoes'] as $resource => $roles) {
+            $this->addResource(new Resource($resource));
+        }
+    }
+
+    public function loadAllow()
+    {
+        foreach($this->arrConfig['permissoes'] as $resource => $roles) {
+            $this->allow($roles, $resource);
+        }
+    }
+
+    public function verificarAcesso(array $funcionalidades, $resource)
+    {
+        foreach ($funcionalidades as $coFuncionalidade => $dsFuncionalidade) {
+            if (!$this->hasResource($resource)) {
+                return false;
+            }
+
+            // possui permissão de acesso
+            if ($this->isAllowed($coFuncionalidade, $resource)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+}

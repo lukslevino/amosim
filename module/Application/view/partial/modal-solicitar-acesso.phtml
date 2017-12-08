@@ -1,0 +1,80 @@
+<!-- Modal Structure -->
+<div id="modalSolicitarAcesso" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-overlay"> Solicitar Acesso</h4>
+        </div>
+        <div class="modal-body">
+            <form id="solicitarAcessoForm" method="POST" role="form">
+                <span class="card-title"><b>Solicitar Acesso</b></span>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input name="cpf" id="cpf" type="text" required>
+                        <label for="cpf">CPF</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input name="nome" id="nome" type="text" required>
+                        <label for="nome">Nome</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input name="dtNascimento" id="dtNascimento" type="text" required placeholder="01/12/1900">
+                        <label for="dtNascimento">Data Nascimento</label>
+                    </div>
+                    <div class="input-field col s6" required>
+                        <select name="tpSexo">
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminino</option>
+                        </select>
+                        <label for="sexo">Sexo</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input name="email" id="email" type="text" required>
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input name="email_confirm" id="email_confirm" type="text" required autocomplete="off">
+                        <label for="email_confirm">Confirme o Email</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input name="fone_cel" id="fone_cel" type="text" required placeholder="(DDD) 99999-9999">
+                        <label for="fone_cel">Telefone Celular</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input name="fone_fixo" id="fone_fixo" type="text" required placeholder="(DDD) 9999-9999">
+                        <label for="fone_fixo">Telefone Fixo</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input name="senha" id="senha" type="password" required>
+                        <label for="senha">Senha</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input name="confirm_senha" id="senha" type="password" required>
+                        <label for="senha">Confirme sua senha</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button id="btn-cancelar" data-target="modal1" class="modal-close waves-effect waves-light btn red lighten-1"
+                type="button">
+            Cancelar
+        </button>
+        <!-- <button id="btn-limpar" class="waves-effect waves-light btn grey lighten-1" type="reset">
+             Limpar
+         </button>-->
+        <button id="btn-cadastrar" data-target="modal2" class="modal-action waves-effect waves-light btn green"
+                type="button" name="submit">
+            Cadastrar
+        </button>
+    </div>
+</div>

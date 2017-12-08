@@ -1,0 +1,76 @@
+<?php if ($this->identity()): ?>
+    <li>
+        <div class="user-view">
+            <div class="background">
+                <img src="/img/fundo_user.jpg">
+            </div>
+            <a href="#user">
+                <img class="circle" src="<?php echo $this->photoProfile();?>">
+            </a>
+            <a href="#name">
+                <span class="white-text name"><?php echo $this->identity()->user->noUsuario;?></span>
+            </a>
+            <a href="#mail">
+                <span class="white-text email"><?php echo $this->identity()->user->emailUsuario;?></span>
+            </a>
+        </div>
+    </li>
+
+<?php if ($this->identity->user->idPerfil == Application\Service\PerfilService::ASSOCIADO):?>
+        <li class="bold">
+            <a href="/" class="waves-effect wave-teal">
+                <i class="material-icons left">person_add</i>
+                Indicar um amigo
+            </a>
+        </li>
+        <li class="bold">
+            <a href="/" class="waves-effect wave-teal">
+                <i class="material-icons left">supervisor_account</i>
+                Amigos indicados
+            </a>
+        </li>
+        <li class="bold">
+            <a href="/" class="waves-effect wave-teal">
+                <i class="material-icons left">account_balance</i>
+                Informar Endereço
+            </a>
+        </li>
+        <li class="bold">
+            <a href="/" class="waves-effect wave-teal">
+                <i class="material-icons left">mood</i>
+                Meus pontos
+            </a>
+        </li>
+        <li class="bold">
+            <a href="/" class="waves-effect wave-teal">
+                <i class="material-icons left">group_add</i>
+                Amigos confirmados
+            </a>
+        </li>
+        <li class="bold">
+            <a href="/" class="waves-effect wave-teal">
+                <i class="material-icons left">notifications_none</i>
+                Notificações
+            </a>
+        </li>
+        <? elseif ($this->identity->user->idPerfil == Application\Service\PerfilService::ADMINISTRADOR):?>
+        <li class="bold">
+            <a href="/" class="waves-effect wave-teal">
+                <i class="material-icons left">person_add</i>
+                Verificar Indicados
+            </a>
+        </li>
+        <li class="bold">
+            <a href="/" class="waves-effect wave-teal">
+                <i class="material-icons left">supervisor_account</i>
+                Usuários
+            </a>
+        </li>
+        <li class="bold">
+            <a href="/" class="waves-effect wave-teal">
+                <i class="material-icons left">account_balance</i>
+                Relatórios
+            </a>
+        </li>
+        <?php endif;?>
+<?php endif;?>

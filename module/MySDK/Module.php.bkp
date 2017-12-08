@@ -1,0 +1,104 @@
+<?php
+/**
+ * MySDK
+ * SDK, é a sigla de Software Development Kit, ou seja, Kit de Desenvolvimento de Software. 
+ * My é uma especialização e otimização da utilização dos recursos do ZendFramework 2, podendo ser evoluido para ZF3
+ */
+
+namespace MySDK;
+
+use Zend\Mvc\ModuleRouteListener;
+use Zend\Mvc\MvcEvent;
+use Zend\Session\Config\SessionConfig;
+use Zend\Session\SessionManager;
+use Zend\Session\Container;
+
+class Module
+{
+    public function onBootstrap(MvcEvent $e)
+    {
+        $this->configRenderError($e);
+        $this->configService($e);
+        $this->configTranslator();
+        
+        \Locale::setDefault('pt_BR');
+        date_default_timezone_set('America/Sao_Paulo');
+        
+        $this->initSession(array(
+        		'remember_me_seconds' => 180,
+        		'use_cookies' => true,
+        		'cookie_httponly' => true,
+        ));
+    }
+    
+    public function configRenderError(MvcEvent $e)
+    {
+    	$eventManager        = $e->getApplication()->getEventManager();
+//     	Acredito que seja para conifugra as rotas, iremos testar, se na opegar a configuracao e outro module.
+//     	$moduleRouteListener = new ModuleRouteListener();
+//     	$moduleRouteListener->attach($eventManager);
+    	//Desabilitando layout no error;
+    	$eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, function($e) {
+    		$result = $e->getResult();
+    		$result->setTerminal(TRUE);
+    	});
+    	$eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function($e) {
+    		$result = $e->getResult();
+    		$result->setTerminal(TRUE);
+    	});    	
+    }
+    
+    public function initSession($config)
+    {
+    	$sessionConfig = new SessionConfig();
+    	$sessionConfig->setOptions($config);
+    	$sessionManager = new SessionManager($sessionConfig);
+    	$sessionManager->start();
+    	Container::setDefaultManager($sessionManager);
+    }
+    
+    public function configService(MvcEvent $e){
+    	//Service manager no abstract Service
+    	return \MySDK\Service\AbstractService::setServiceManager($e->getApplication()->getServiceManager());
+    }
+    /**
+     * Configura o Zend Translator
+     */
+    public function configTranslator()
+    {
+    	//Cria o translator
+    	$translator = new \Zend\Mvc\I18n\Translator(new \Zend\I18n\Translator\Translator());
+    	//Adiciona o arquivo de tradução
+    	$translator->addTranslationFile(
+    			'phpArray',
+    			__DIR__ . '/../../vendor/zendframework/zend-i18n-resources/languages/pt_BR/Zend_Validate.php',
+    			'default',
+    			'pt_BR'
+    	);
+//     	debug(__DIR__ . '/../../vendor/zendframework/zend-i18n-resources/languages/pt_BR/Zend_Validate.php',1);
+    	//Define o tradutor padrão dos validadores
+    	return \Zend\Validator\AbstractValidator::setDefaultTranslator($translator);
+    }
+
+    public function getViewHelperConfig()
+    {
+    	return array(
+    		'invokables' => array(
+    			'form' => 'MySDK\Form\View\Helper\Form',
+    			'formBasic' => 'MySDK\Form\View\Helper\FormBasic',
+    			'formfield' => 'MySDK\Form\View\Helper\FormField',
+    		),
+    	);
+    }
+    
+    public function getAutoloaderConfig()
+    {
+        return array(
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                ),
+            ),
+        );
+    }
+}
